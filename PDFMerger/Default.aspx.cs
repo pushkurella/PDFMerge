@@ -13,5 +13,11 @@ namespace PDFMerger
         {
 
         }
+
+
+        protected void btnMerge_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
