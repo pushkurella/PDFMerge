@@ -1,9 +1,13 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
 
 namespace PDFMerger
 {
@@ -39,6 +43,36 @@ namespace PDFMerger
                 Label2.Visible = false;
                 Label3.Visible = false;
                 Label4.Visible = false;
+            }
+
+            //calling create merged pdf code
+            string pdfPath = "";
+            string sourceDir = "";
+            CreateMergedPDF(pdfPath, sourceDir);
+
+            
+        }
+        static void CreateMergedPDF(string targetPDF, string sourceDir)
+        {
+            using (FileStream stream = new FileStream(targetPDF, FileMode.Create))
+            {
+                Document pdfDoc = new Document(PageSize.A4);
+                PdfCopy pdf = new PdfCopy(pdfDoc, stream);
+                pdfDoc.Open();
+                var files = Directory.GetFiles(sourceDir);
+                Console.WriteLine("Merging files count: " + files.Length);
+                int i = 1;
+                foreach (string file in files)
+                {
+                    Console.WriteLine(i + ". Adding: " + file);
+                    pdf.AddDocument(new PdfReader(file));
+                    i++;
+                }
+
+                if (pdfDoc != null)
+                    pdfDoc.Close();
+
+                Console.WriteLine("SpeedPASS PDF merge complete.");
             }
         }
 
